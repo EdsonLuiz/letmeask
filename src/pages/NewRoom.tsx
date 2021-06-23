@@ -4,8 +4,12 @@ import illustrationImg from '../assets/images/illustration.svg'
 import logoImg from '../assets/images/logo.svg'
 import '../styles/auth.scss'
 import { Button } from '../components/Button'
+// import { useContext } from 'react'
+// import { AuthContext } from '../contexts/AuthContexts'
 
 export function NewRoom() {
+  // const {user} = useContext(AuthContext)
+
 	return (
     <div id="page-auth">
       <aside>
