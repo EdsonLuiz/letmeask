@@ -1,46 +1,80 @@
-# Getting Started with Create React App
+# LetMeAsk
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Notes
+- To use SASS:
+  ```shell
+  # use version 5 not 6
+  $ yarn add node-sass@^5.0.0
+  ```
 
-## Available Scripts
+- Use @font-face. Download and copy configuration from [this site](https://google-webfonts-helper.herokuapp.com/fonts)
 
-In the project directory, you can run:
+- Remember: React exposes `ButtonHTMLAttributes`, you can use it in your types.
+  ```ts
+  import {ButtonHTMLAttributes, ReactNode} from 'react'
 
-### `yarn start`
+  type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+    children: ReactNode
+  }
+  ```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- CSS not: 
+  ```scss
+  &:not(:disabled):hover {
+    filter: brightness(0.9);
+  }
+  ```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- Navigate using `useHistory`
+  ```ts
+  import {useHistory} from 'react-router-dom'
 
-### `yarn test`
+  export function SomeComponent() {
+    const history = useHistory()
+    
+    function navigateTo() {
+      history.push('/')
+    }
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+    return <button onClick={navigateTo}>navigate</button>
+  }
+  ```
 
-### `yarn build`
+- Navigate using `Link`
+  ```ts
+  import {Link} from 'react-router-dom'
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  <Link to="/">navigate</Link>
+  ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- ContextAPI
+  ```ts
+  // SomeComponent.tsx
+  import {createConctext} from 'react'
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+  export const SomeContext = createContext({})
 
-### `yarn eject`
+  function SomeComponent() {
+    const [value, setValue] = useState('Context value')
+    return (
+      <SomeContext.Provider value={{value, setValue}}>
+        <MagicComponent />
+      </SomeContext.Provider>
+    )
+  }
+  ```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+  ```ts
+  // MagicComponent.tsx
+  import {useContext} from 'react' 
+  import {SomeContext} from './SomeComponent'
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+  function MagicComponent() {
+    const {value, setValue} = useContext(SomeContext)
+    return (
+      {/*value will be `Context value`*/}
+      <h1>{value}</h1>
+    )
+  }
+  ```
