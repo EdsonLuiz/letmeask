@@ -78,3 +78,5 @@
     )
   }
   ```
+
+  - Switch from `react-router-dom` prevents two routes from beign called at the same time.
