@@ -3,7 +3,7 @@ import logoImg from '../assets/images/logo.svg'
 import deleteImg from '../assets/images/delete.svg'
 import '../styles/rooms.scss'
 import { RoomCode } from '../components/RoomCode'
-import { useParams } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 // import { useAuth } from '../hooks/useAuth'
 import { Question } from '../components/Question'
 import { useRoom } from '../hooks/useRoom'
@@ -18,11 +18,20 @@ export function AdminRoom() {
   const params = useParams<RoomParams>()
   const roomId = params.id
   const {questions, title} = useRoom(roomId)
+  const history = useHistory()
 
   async function handleDeleteQuestion(questionId: string) {
     if(window.confirm(`Tem certeza que deseja deletar esta pergunta?`)) {
       await database.ref(`/rooms/${roomId}/questions/${questionId}`).remove()
     }
+  }
+
+  async function handleEndRoom() {
+    await database.ref(`/rooms/${roomId}`).update({
+      endedAt: new Date()
+    })
+
+    history.push('/')
   }
 
   return (
@@ -32,7 +41,7 @@ export function AdminRoom() {
           <img src={logoImg} alt="representação do logo da empresa" />
           <div>
             <RoomCode code={roomId} />
-            <Button isOutlined>Encerrar sala</Button>
+            <Button isOutlined onClick={handleEndRoom}>Encerrar sala</Button>
           </div>
         </div>
       </header>
