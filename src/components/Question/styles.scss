@@ -1,4 +1,5 @@
 @import '../../colors';
+@import '../../fonts';
 
 .question {
   background-color: $white-100;
@@ -34,6 +35,35 @@
         margin-left: 8px;
         color: $gray-medium-600;
         font-size: 14px;
+      }
+    }
+
+    button {
+      border: 0;
+      background-color: transparent;
+      cursor: pointer;
+
+      &.like-button {
+        font-family: 'Poppins', sans-serif;
+        font-size: 16px;
+        display: flex;
+        align-items: flex-end;
+        color: $gray-medium-600;
+        gap: 8px;
+
+        transition: filter .3s;
+
+        &.liked {
+          color: $purple;
+
+          svg path {
+            stroke: $purple;
+          }
+        }
+
+        &:hover {
+          filter: brightness(.7);
+        }
       }
     }
   }
