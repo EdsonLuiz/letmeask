@@ -3,7 +3,7 @@ import logoImg from '../assets/images/logo.svg'
 import '../styles/rooms.scss'
 import { RoomCode } from '../components/RoomCode'
 import { useParams } from 'react-router-dom'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { database } from '../services/firebase'
 
@@ -11,7 +11,32 @@ type RoomParams = {
   id: string
 }
 
+type Questions = {
+  id: string
+  author: {
+    name: string;
+    avatar: string;
+  }
+  content: string;
+  isAnswered: boolean;
+  isHighlighted: boolean;
+
+}
+
+type FirebaseQuestions = Record<string, {
+  author: {
+    name: string;
+    avatar: string;
+  }
+  content: string;
+  isAnswered: boolean;
+  isHighlighted: boolean;
+
+}>
+
 export function Room() {
+  const [questions, setQuestions] = useState<Questions[]>([])
+  const [title, setTitle] = useState('')
   const {user} = useAuth()
   const params = useParams<RoomParams>()
   const roomId = params.id
@@ -43,6 +68,27 @@ export function Room() {
 
   }
 
+  useEffect(() => {
+    const roomRef = database.ref(`/rooms/${roomId}`)
+
+    roomRef.once('value', room => {
+      const databaseRoom = room.val()
+      const firebaseQuestions: FirebaseQuestions = databaseRoom.questions ?? {}
+      const parsedQuestions = Object.entries(firebaseQuestions).map(([key, value]) => {
+        return {
+          id: key,
+          content: value.content,
+          author: value.author,
+          isAnswered: value.isAnswered,
+          isHighlighted: value.isHighlighted,
+        }
+      })
+
+      setTitle(databaseRoom.title)
+      setQuestions(parsedQuestions)
+    })
+  }, [roomId])
+
   return (
     <div id="page-room">
       <header>
@@ -54,8 +100,10 @@ export function Room() {
 
       <main className="content">
         <div className="room-title">
-          <h1>sala react</h1>
-          <span>4 perguntas</span>
+          <h1>Sala {title}</h1>
+          {questions.length > 0 && 
+            <span>{questions.length} perguntas</span>
+          }
         </div>
 
         <form onSubmit={handleSendQuestion}>
