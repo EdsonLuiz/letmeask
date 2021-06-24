@@ -80,3 +80,9 @@
   ```
 
   - Switch from `react-router-dom` prevents two routes from beign called at the same time.
+  - Get parameter route inside react component:
+    ```ts
+    import {useParams} from 'react'
+
+    const params = useParams()
+    ```
