@@ -2,6 +2,7 @@
 @import '../fonts';
 
 .button {
+  font-family: inherit;
   height: 50px;
   border-radius: 8px;
   font-weight: 500;
@@ -20,6 +21,18 @@
 
   img {
     margin-right: 8px;
+  }
+
+  &.outlined {
+    background-color: $white;
+    border: 1px solid $purple;
+    color: $purple;
+
+    &:hover {
+      background-color: $purple;
+      border: 1px solid transparent;
+      color: $white;
+    }
   }
 
   &:not(:disabled):hover {
