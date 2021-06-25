@@ -86,3 +86,5 @@
 
     const params = useParams()
     ```
+
+  - Use `classnames` package when there are many class items.
